@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_trip/pages/HomePage.dart';
-import 'package:flutter_trip/pages/MinePage.dart';
-import 'package:flutter_trip/pages/SearchPage.dart';
-import 'package:flutter_trip/pages/TravelPage.dart';
+import 'package:flutter_trip/pages/home_page.dart';
+import 'package:flutter_trip/pages/mine_page.dart';
+import 'package:flutter_trip/pages/search_page.dart';
+import 'package:flutter_trip/pages/travel_page.dart';
 
 class MainTabbar extends StatefulWidget {
   @override
