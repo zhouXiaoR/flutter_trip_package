@@ -5,6 +5,7 @@ import 'package:flutter_trip/Models/home_model.dart';
 import 'package:flutter_trip/Models/pinda_item_model.dart';
 import 'package:flutter_trip/Models/sales_box_model.dart';
 import 'package:flutter_trip/Services/home_service.dart';
+import 'package:flutter_trip/Views/hot_activity_view.dart';
 import 'package:flutter_trip/Views/operator_header_view.dart';
 import 'package:flutter_trip/Views/single_card_view.dart';
 
@@ -119,24 +120,89 @@ class _HomePageState extends State<HomePage> {
   }
 
   _cardItemsWidget() {
-
     if (gridNav == null) return Text('1111');
 
     return Container(
-      padding: const EdgeInsets.only(left: 10,right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       color: Color(0xfff2f2f2),
-      height: 470,
+      height: 460,
       child: Container(
         color: Color(0xfff2f2f2),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SingleCardView(gridtem: gridNav.hotel,type: CardDirection.TopLeft,),
-            SingleCardView(gridtem: gridNav.flight,type: CardDirection.none,),
-            SingleCardView(gridtem: gridNav.travel,type: CardDirection.BottomLeft,),
+            SingleCardView(
+              gridtem: gridNav.hotel,
+              cardIndex: CardIndex.First,
+            ),
+            SingleCardView(
+              gridtem: gridNav.flight,
+              cardIndex: CardIndex.Between,
+            ),
+            SingleCardView(
+              gridtem: gridNav.travel,
+              cardIndex: CardIndex.Last,
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  _moreServiceItemsWidget() {
+    return Container(
+      color: Color(0xfff2f2f2),
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Container(
+        height: 150,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: subNavList.length > 0 ? _buildGridView() : null,
+      ),
+    );
+  }
+
+  _buildGridView() {
+    return GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5, childAspectRatio: 1, mainAxisSpacing: 10),
+        itemCount: subNavList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _gridItem(subNavList[index]);
+        });
+  }
+
+  Widget _gridItem(PindaItemModel model) {
+    return Container(
+      color: Color.fromARGB(0, 0, 0, 0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Image.network(
+            model.icon,
+            fit: BoxFit.cover,
+            width: 30,
+            height: 30,
+          ),
+          Container(
+            child: Text(model.title,textScaleFactor: 0.8,),
+          )
+        ],
+      ),
+    );
+  }
+
+  _buildBottomItems() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xfff2f2f2),
+      ),
+      height: 310,
+      child: HotActivityView(salesBoxModel: salesBox,),
     );
   }
 
@@ -144,23 +210,10 @@ class _HomePageState extends State<HomePage> {
     return ListView(
       children: <Widget>[
         _headerLoopViewWidget(),
-
         _pindaItemsWidget(),
-
         _cardItemsWidget(),
-
-        Row(
-          children: <Widget>[
-            Container(
-              height: 200,
-              width: 200,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
-              ),
-            )
-          ],
-        )
+        _moreServiceItemsWidget(),
+        _buildBottomItems(),
       ],
     );
   }
